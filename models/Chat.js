@@ -3,13 +3,20 @@ const mongoose = require('mongoose');
 const ChatSchema = new mongoose.Schema(
     {
         participants : [{
-            user : {
-                type : mongoose.Schema.Types.ObjectId,
-                ref  : 'Friend'
+            sender : {
+                type     : mongoose.Schema.Types.ObjectId,
+                ref      : 'User',
+                required : true
             },
-            group : {
-                type : mongoose.Schema.Types.ObjectId,
-                ref  : 'Group'
+            receiver : {
+                user : {
+                    type : mongoose.Schema.Types.ObjectId,
+                    ref  : 'Friend'
+                },
+                group : {
+                    type : mongoose.Schema.Types.ObjectId,
+                    ref  : 'Group'
+                }
             }
         }],
         messages : [{
@@ -29,7 +36,10 @@ const ChatSchema = new mongoose.Schema(
                 type    : Boolean,
                 default : false
             }
-        }]
+        }],
+        conversationType : {
+            type : Boolean          // 0= one-to-one, 1= group
+        }
     },
     {timestamps : true}
 );
