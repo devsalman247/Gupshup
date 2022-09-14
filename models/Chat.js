@@ -20,6 +20,9 @@ const ChatSchema = new mongoose.Schema(
             }
         }],
         messages : [{
+            category : {
+                type : Number       // 0 = group, 1 = one-to-one
+            },
             body : {
                 type : String
             },
@@ -36,10 +39,7 @@ const ChatSchema = new mongoose.Schema(
                 type    : Boolean,
                 default : false
             }
-        }],
-        conversationType : {
-            type : Boolean          // 0= one-to-one, 1= group
-        }
+        }]
     },
     {timestamps : true}
 );
