@@ -17,7 +17,11 @@ const FriendSchema = new mongoose.Schema(
         isBlocked : {
             type    : Boolean,
             default : false
-        }
+        },
+        isArchived : {
+            type    : Boolean,
+            default : false
+        } 
     },
     {timestamps : true}
 );
