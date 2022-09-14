@@ -33,10 +33,14 @@ const GroupSchema = new mongoose.Schema(
             type    : Boolean,
             default : false
         },
+        isArchived : {
+            type    : Boolean,
+            default : false
+        }, 
         canSend : {
             type    : Boolean,  // false= only admin can send, true= all participants can send
             default : true
-        } 
+        }
     },
     {timestamps : true}
 );
