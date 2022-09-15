@@ -1,6 +1,7 @@
 const router = require("express").Router(),
       passport = require("passport"),
       strategy = require("../../config/passport"),
+      auth = require('../auth'),
       User = require("../../models/User");
 
 passport.use(strategy);
@@ -52,5 +53,15 @@ router.post("/login", function (req, res, next) {
     }
   )(req, res, next);
 });
+
+router.get("/profile", auth.verifyToken,(req, res, next) => {
+  const {id} = req.user;
+  User.findById(id).populate('friends').exec((error, user) => {
+    if(error) {
+      res.send({error : {message : error.message}});
+    }
+    res.send(user);
+  })
+}) 
 
 module.exports = router;

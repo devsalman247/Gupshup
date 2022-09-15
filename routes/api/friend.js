@@ -16,10 +16,16 @@ router.post('/add', (req, res, next) => {
             res.send("User is not registered.");
         }else {
             const friend = new Friend();
+            friend.name = user.id;
             friend.save()
             .then(friendData => {
-                user.friends.push(friendData);
-                user.save();
+                User.findById(req.user.id, (error, data) => {
+                    if(error) {
+                        res.send({error : {message : error.message}});
+                    }
+                    data.friends.push(friendData);
+                    data.save();
+                })
                 res.send(friendData);
             })
             .catch(error => {
