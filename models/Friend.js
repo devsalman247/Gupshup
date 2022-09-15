@@ -2,13 +2,15 @@ const mongoose = require('mongoose');
 
 const FriendSchema = new mongoose.Schema(
     {
-        friendDetails : {
+        name : {
             type : mongoose.Schema.Types.ObjectId,
-            ref  : 'User'
+            ref  : 'User',
+            required : true
         },
         commonGroups : [{
             type : mongoose.Types.ObjectId,
-            ref  : 'Group'
+            ref  : 'Group',
+            unique : true
         }],
         isMuted : {
             type    : Boolean,
@@ -22,25 +24,10 @@ const FriendSchema = new mongoose.Schema(
             type    : Boolean,
             default : false
         },
-        messages : [{
-            body : {
-                type     : String,
-                required : true
-            },
-            sentBy : {
-                type : mongoose.Schema.Types.ObjectId,
-                ref  : 'User'
-            },
-            sentAt   : Date,
-            isStarred : {
-                type    : Boolean,
-                default : false
-            },
-            isLiked : {
-                type    : Boolean,
-                default : false
-            }
-        }] 
+        chat : {
+            type : mongoose.Schema.Types.ObjectId,
+            ref  : 'Chat'
+        }
     },
     {timestamps : true}
 );
@@ -48,11 +35,12 @@ const FriendSchema = new mongoose.Schema(
 FriendSchema.methods.toJSON = function() {
     return {
         id : this.id,
-        friendDetails : this.friendDetails,
+        name : this.name,
         commonGroups : this.commonGroups,
         isMuted : this.isMuted,
         isBlocked : this.isBlocked,
-        isArchived : this.isArchived
+        isArchived : this.isArchived,
+        chat : this.chat
     }
 }
 

@@ -3,26 +3,15 @@ const mongoose = require('mongoose');
 const ChatSchema = new mongoose.Schema(
     {
         participants : [{
-            sender : {
-                type     : mongoose.Schema.Types.ObjectId,
-                ref      : 'User',
-                required : true
-            },
-            receiver : {
-                user : {
-                    type : mongoose.Schema.Types.ObjectId,
-                    ref  : 'Friend'
-                },
-                group : {
-                    type : mongoose.Schema.Types.ObjectId,
-                    ref  : 'Group'
-                }
-            }
+            type : mongoose.Schema.Types.ObjectId,
+            ref  : 'User',
+            unique : true
         }],
+        category : {
+            type     : Number ,  // 0 = group, 1 = one-to-one 2 = unknown-to-unknown
+            required : true
+        },
         messages : [{
-            category : {
-                type : Number       // 0 = group, 1 = one-to-one
-            },
             body : {
                 type     : String,
                 required : true
@@ -31,15 +20,7 @@ const ChatSchema = new mongoose.Schema(
                 type : mongoose.Schema.Types.ObjectId,
                 ref  : 'User'
             },
-            sentAt   : Date,
-            isStarred : {
-                type    : Boolean,
-                default : false
-            },
-            isLiked : {
-                type    : Boolean,
-                default : false
-            }
+            sentAt   : Date
         }]
     },
     {timestamps : true}

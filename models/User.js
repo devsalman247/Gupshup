@@ -74,7 +74,9 @@ UserSchema.methods.toJSON = function() {
     return {
         name  : this.name,
         email : this.email,
-        about : this.about
+        about : this.about,
+        friends : this.friends,
+        groups  : this.groups
     }
 }
 
