@@ -4,8 +4,7 @@ const ChatSchema = new mongoose.Schema(
     {
         participants : [{
             type : mongoose.Schema.Types.ObjectId,
-            ref  : 'User',
-            unique : true
+            ref  : 'User'
         }],
         category : {
             type     : Number ,  // 0 = group, 1 = one-to-one 2 = unknown-to-unknown
@@ -25,5 +24,14 @@ const ChatSchema = new mongoose.Schema(
     },
     {timestamps : true}
 );
+
+ChatSchema.methods.toJSON = function () {
+    return {
+        id : this.id,
+        participants : this.participants,
+        category : this.category,
+        messages : this.messages
+    }
+}
 
 module.exports = mongoose.model('Chat', ChatSchema);
