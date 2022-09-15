@@ -24,7 +24,8 @@ const ChatSchema = new mongoose.Schema(
                 type : Number       // 0 = group, 1 = one-to-one
             },
             body : {
-                type : String
+                type     : String,
+                required : true
             },
             sentBy : {
                 type : mongoose.Schema.Types.ObjectId,

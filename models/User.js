@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema(
     {
         name : {
             type     : String,
-            required : true
+            required : [true, 'is required.']
         },
         email : {
             type     : String,
@@ -31,15 +31,15 @@ const UserSchema = new mongoose.Schema(
     {timestamps : true}
 );
 
-UserSchema.plugin(uniqueValidator, {message : "is required."});
+UserSchema.plugin(uniqueValidator, {message : "is already taken."});
 
-UserSchema.pre('save', function() {
+UserSchema.methods.setPassword = function() {
     this.salt = bcrypt.genSaltSync();
-    this.hash = bcrypt.hashSync(this.hash, this.salt);
-});
+    this.hash = bcrypt.hashSync(this.hash, this.salt);   
+}
 
 UserSchema.methods.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.password);
+    return bcrypt.compareSync(password, this.hash);
 };
 
 UserSchema.methods.generateJWT = function() {
