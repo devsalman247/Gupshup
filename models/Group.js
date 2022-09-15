@@ -40,7 +40,26 @@ const GroupSchema = new mongoose.Schema(
         canSend : {
             type    : Boolean,  // false= only admin can send, true= all participants can send
             default : true
-        }
+        },
+        messages : [{
+            body : {
+                type     : String,
+                required : true
+            },
+            sentBy : {
+                type : mongoose.Schema.Types.ObjectId,
+                ref  : 'User'
+            },
+            sentAt   : Date,
+            isStarred : {
+                type    : Boolean,
+                default : false
+            },
+            isLiked : {
+                type    : Boolean,
+                default : false
+            }
+        }]
     },
     {timestamps : true}
 );

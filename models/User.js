@@ -23,6 +23,14 @@ const UserSchema = new mongoose.Schema(
             type     : String,
             required : [true, 'is required']
         },
+        friends : [{
+            type : mongoose.Schema.Types.ObjectId,
+            ref  : 'Friend'
+        }],
+        groups : [{
+            type : mongoose.Schema.Types.ObjectId,
+            ref  : 'Group'
+        }],
         salt : {
             type     : String,
             required : true

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const FriendSchema = new mongoose.Schema(
     {
-        name : {
+        friendDetails : {
             type : mongoose.Schema.Types.ObjectId,
             ref  : 'User'
         },
@@ -21,9 +21,39 @@ const FriendSchema = new mongoose.Schema(
         isArchived : {
             type    : Boolean,
             default : false
-        } 
+        },
+        messages : [{
+            body : {
+                type     : String,
+                required : true
+            },
+            sentBy : {
+                type : mongoose.Schema.Types.ObjectId,
+                ref  : 'User'
+            },
+            sentAt   : Date,
+            isStarred : {
+                type    : Boolean,
+                default : false
+            },
+            isLiked : {
+                type    : Boolean,
+                default : false
+            }
+        }] 
     },
     {timestamps : true}
 );
+
+FriendSchema.methods.toJSON = function() {
+    return {
+        id : this.id,
+        friendDetails : this.friendDetails,
+        commonGroups : this.commonGroups,
+        isMuted : this.isMuted,
+        isBlocked : this.isBlocked,
+        isArchived : this.isArchived
+    }
+}
 
 module.exports = mongoose.model('Friend',FriendSchema);
