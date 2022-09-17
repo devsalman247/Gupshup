@@ -19,11 +19,22 @@ const ChatSchema = new mongoose.Schema(
                 type : mongoose.Schema.Types.ObjectId,
                 ref  : 'User'
             },
-            sentAt   : Date,
+            sentAt   : {
+                type     : Date,
+                required : true
+            },
             isEdited : {
                 type    : Boolean,
                 default : false
-            }
+            },
+            editedBy : {
+                type : mongoose.Schema.Types.ObjectId,
+                ref  : 'User'
+            },
+            deletedBy : [{
+                type : mongoose.Schema.Types.ObjectId,
+                ref  : 'User'
+            }]
         }]
     },
     {timestamps : true}

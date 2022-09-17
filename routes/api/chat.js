@@ -1,9 +1,16 @@
 const router = require('express').Router(),
       User = require('../../models/User'),
       auth = require('../auth'),
+      checkMember = require('../../middlewares/checkMember'),
       Chat = require('../../models/Chat');
 
 router.use(auth.verifyToken);
+// router.use(checkMember);
+
+router.get('/', (req, res, next) => {
+    const {chat} = req;
+    res.send(chat);
+})
 
 router.post('/start', (req, res, next) => {
     const {id, message} = req.body;
@@ -53,22 +60,21 @@ router.post('/start', (req, res, next) => {
 });
 
 router.delete('/delete', (req, res, next) => {
-    const {userId} = req.user;
     const {chatId, msgId} = req.body;
     if(!chatId || !msgId) {
         res.send({error : {message : "Please provide chat id and message id."}})
     }
-    Chat.findOne({id : chatId}, (error , chat) => {
+    Chat.findById(chatId, (error , chat) => {
         if(error) {
             res.send({error : {message : error.message}});
         }else if(!chat) {
             res.send({error : {message : "Chat is not found!"}});
         }else {
-            const index = chat.messages.findIndex(obj => obj.id===msgId && obj.name===userId);
+            const index = chat.messages.findIndex(obj => obj.id===msgId && obj.name===req.user.id);
             if(index===-1) {
                 res.send({error : {message : "Message is not present."}});
             }else {
-                chat.messages.splice(index,1);
+                chat.messages[index].deletedBy.push(req.user.id);
                 chat.save((err, deletedChat) => {
                     if(err) {
                         res.send({error : {message : err.message}});
@@ -82,23 +88,25 @@ router.delete('/delete', (req, res, next) => {
 })
 
 router.put('/update', (req, res, next) => {
-    const {userId} = req.user;
     const {chatId, msgId, message} = req.body;
     if(!chatId, !msgId, !message) {
         res.send({error : {message : "Please provide chat id, message id and message to update."}})
     }
-    Chat.findOne({id : chatId}, (error , chat) => {
+    
+    Chat.findById(req.body.chatId, (error , chat) => {
         if(error) {
             res.send({error : {message : error.message}});
         }else if(!chat) {
             res.send({error : {message : "Chat is not found!"}});
         }else {
-            const index = chat.messages.findIndex(obj => obj.id===msgId && obj.name===userId);
+            console.log(chat);
+            const index = chat.messages.findIndex(obj => obj.id===msgId && obj.name===req.user.id);
             if(index===-1) {
                 res.send({error : {message : "Message is not present."}});
             }else {
                 chat.messages[index].body = message;
                 chat.messages[index].isEdited = true;
+                chat.messages[index].editedBy = req.user.id;
                 chat.save((err, updatedChat) => {
                     if(err) {
                         res.send({error : {message : err.message}});
