@@ -93,7 +93,7 @@ router.put('/update', (req, res, next) => {
         res.send({error : {message : "Please provide chat id, message id and message to update."}})
     }
     
-    Chat.findById(req.body.chatId, (error , chat) => {
+    Chat.findById(chatId, (error , chat) => {
         if(error) {
             res.send({error : {message : error.message}});
         }else if(!chat) {
