@@ -35,7 +35,10 @@ const ChatSchema = new mongoose.Schema(
                 type : mongoose.Schema.Types.ObjectId,
                 ref  : 'User'
             }]
-        }]
+        }],
+        deletedBy : {
+            type  : mongoose.Schema.Types.ObjectId,
+        }
     },
     {timestamps : true}
 );
