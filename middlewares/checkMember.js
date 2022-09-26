@@ -15,7 +15,9 @@ module.exports = function(req, res, next) {
                 res.send({message : "No message "});
             }else {
                 if(chat.participants.includes(id)) {
-                    req.chat = chat;
+                    const filteredChat = chat; 
+                    filteredChat.messages = chat.messages.filter(obj => !obj.deletedBy.includes(id));
+                    req.chat = filteredChat;
                     next();
                 }else {
                     res.send({error : {message : "You're not a member of chat!!"}});

@@ -41,6 +41,10 @@ router.post('/start', (req, res, next) => {
                 sentBy  : req.user.id,
                 sentAt  : Date.now()
             });
+            const deletedChatFor = foundChat.deletedBy.indexOf(req.user.id);  
+            if(deletedChatFor>-1) {
+                foundChat.deletedBy.splice(deletedChatFor,1);
+            }
             foundChat.save((error, data) => {
                 if(error) {
                     res.send({error : {message : error.message}});
@@ -76,6 +80,11 @@ router.delete('/delete', checkMember,(req, res, next) => {
 router.delete('/clear', checkMember, (req, res, next) => {
     const {chat} = req;
     chat.deletedBy.push(req.user.id);
+    chat.messages.forEach(obj => {
+        if(!obj.deletedBy.includes(req.user.id)) {
+            obj.deletedBy.push(req.user.id);
+        }
+    });
     chat.save(err => {
         if(err) {
             res.send({message : "action can't be completed. Please try again!!"});
@@ -107,6 +116,17 @@ router.put('/update', checkMember,(req, res, next) => {
         });
     }
 
+})
+
+router.get('/search', checkMember, (req, res, next) => {
+    const {chat} = req;
+    const {message} = req.body;
+    const filteredChat = chat.messages.filter(obj => obj.body.toLowerCase().indexOf(message)>-1);
+    if(filteredChat) {
+        res.send(filteredChat);
+    }else {
+        res.send({error : {message : "no messages found"}});
+    }
 })
 
 module.exports = router;
