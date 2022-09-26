@@ -83,6 +83,15 @@ router.delete('/clear', checkMember, (req, res, next) => {
     chat.messages.forEach(obj => {
         if(!obj.deletedBy.includes(req.user.id)) {
             obj.deletedBy.push(req.user.id);
+            if(chat.deletedBy.length===chat.participants.length) {
+                Chat.findByIdAndDelete(chat.id, (err, deleted) => {
+                    if(err) {
+                        res.send({error : {message : "Chat couldn't be deleted. Please try again!!"}});
+                    }else{
+                        res.send({message : "chat deleted successfully"});
+                    }
+                })
+            }
         }
     });
     chat.save(err => {
