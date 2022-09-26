@@ -73,6 +73,18 @@ router.delete('/delete', checkMember,(req, res, next) => {
     }
 })
 
+router.delete('/clear', checkMember, (req, res, next) => {
+    const {chat} = req;
+    chat.deletedBy.push(req.user.id);
+    chat.save(err => {
+        if(err) {
+            res.send({message : "action can't be completed. Please try again!!"});
+        }else {
+            res.send({message : "chat deleted successfully"});
+        }
+    })    
+})
+
 router.put('/update', checkMember,(req, res, next) => {
     const {msgId, message} = req.body;
     if(!msgId, !message) {

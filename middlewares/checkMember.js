@@ -11,6 +11,8 @@ module.exports = function(req, res, next) {
                 res.send({error : {message : err.message}});
             }else if(!chat) {
                 res.send({error : {message : "Chat not found!"}});
+            }else if(chat?.deletedBy?.includes(req.user.id)) {
+                res.send({message : "No message "});
             }else {
                 if(chat.participants.includes(id)) {
                     req.chat = chat;
