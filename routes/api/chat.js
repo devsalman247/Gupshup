@@ -67,6 +67,9 @@ router.delete('/delete', checkMember,(req, res, next) => {
         res.send({error : {message : "Message is not present."}});
     }else {
         chat.messages[index].deletedBy.push(req.user.id);
+        if(chat.messages[index].deletedBy.length===chat.participants.length) {
+            chat.messages.splice(index, 1);
+        }
         chat.save((err, deletedChat) => {
             if(err) {
                 res.send({error : {message : err.message}});
