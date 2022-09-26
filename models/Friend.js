@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const FriendSchema = new mongoose.Schema(
     {
-        name : {
+        friendId : {
             type : mongoose.Schema.Types.ObjectId,
             ref  : 'User',
             required : true
