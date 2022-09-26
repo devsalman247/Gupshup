@@ -24,8 +24,22 @@ const UserSchema = new mongoose.Schema(
             required : [true, 'is required']
         },
         friends : [{
-            type : mongoose.Schema.Types.ObjectId,
-            ref  : 'Friend'
+            status  : {
+                type : Number,
+                enum : [
+                    0,  //requested
+                    1,  //pending
+                    2   //friends
+                ]
+            },
+            requestId : {
+                type    : mongoose.Schema.Types.ObjectId,
+                ref     : 'User'
+            }, 
+            friendDetails : {
+                type    : mongoose.Schema.Types.ObjectId,
+                ref     : 'Friend'
+            }
         }],
         groups : [{
             type : mongoose.Schema.Types.ObjectId,
