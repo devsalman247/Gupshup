@@ -7,7 +7,8 @@ const GroupSchema = new mongoose.Schema(
             required : [true, 'is required']
         },
         description : {
-            type : String
+            type     : String,
+            required : true
         },
         admins : [{
             type : mongoose.Schema.Types.ObjectId,
@@ -19,47 +20,25 @@ const GroupSchema = new mongoose.Schema(
         }], 
         limit : {
             type    : Number,
-            default : 200
+            default : 200,
+            immutable : true
         },
-        created_At : {
+        createdAt : {
             type    : Date,
             default : Date.now()
         },
-        created_By : {
+        createdBy : {
             type : mongoose.Schema.Types.ObjectId,
             ref  : 'User'
-        },
-        isMuted : {
-            type    : Boolean,
-            default : false
-        },
-        isArchived : {
-            type    : Boolean,
-            default : false
         }, 
-        canSend : {
+        canSendMsg : {
             type    : Boolean,  // false= only admin can send, true= all participants can send
             default : true
         },
-        messages : [{
-            body : {
-                type     : String,
-                required : true
-            },
-            sentBy : {
-                type : mongoose.Schema.Types.ObjectId,
-                ref  : 'User'
-            },
-            sentAt   : Date,
-            isStarred : {
-                type    : Boolean,
-                default : false
-            },
-            isLiked : {
-                type    : Boolean,
-                default : false
-            }
-        }]
+        chat : {
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'Chat'
+        }
     },
     {timestamps : true}
 );
